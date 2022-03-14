@@ -62,7 +62,6 @@ jobs:
 
       - name: Update bot
         if: ${{ env.RELEASE_VERSION }} == "cicd-github" # cicd-github > main
-        run: echo ${{ env.BOT_VERSION }}
-#        run: |
-#          java -jar botCLI.jar bot deploy -version ${env.BOT_VERSION}-${GITHUB_SHA::8} -botId "botDemoCiCd" -file dist/botDemoCiCd-1.0.tar.gz -python
-#          java -jar botCLI.jar bot release -botId "botDemoCiCd" -version ${env.BOT_VERSION}-${GITHUB_SHA::8}
+        run: |
+          java -jar botCLI.jar bot deploy -version ${{ env.BOT_VERSION }}-${GITHUB_SHA::8} -botId "botDemoCiCd" -file dist/botDemoCiCd-1.0.tar.gz -python
+          java -jar botCLI.jar bot release -botId "botDemoCiCd" -version ${{ env.BOT_VERSION }}-${GITHUB_SHA::8}

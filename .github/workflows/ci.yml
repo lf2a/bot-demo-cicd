@@ -39,12 +39,12 @@ jobs:
         run: |
           sudo apt install unzip
           unzip cli.zip
-          ls -lha 1.6
-        # generage 1.6 folder
+          cd 1.6/
+          ls -lha
 
       - name: Echo variables in config file.
         run: |
-          cat << EOT > 1.6/config.properties
+          cat << EOT > config.properties
              organization=${{ env.BOTCITY_ORGANIZATION }}
              workspace=${{ env.BOTCITY_ORGANIZATION }}
              server=${{ env.BOTCITY_SERVER }}
@@ -53,7 +53,7 @@ jobs:
           EOT
 
       - name: Echo variables in config file.
-        run: cat 1.6/config.properties
+        run: cat config.properties
 
       - name: Run command update in Botcity
-        run: java -jar 1.6/botCLI.jar bot list
+        run: java -jar botCLI.jar bot list

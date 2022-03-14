@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+env:
+  BOTCITY_SERVER: ${{ secrets.BOTCITY_SERVER }}
+  BOTCITY_KEY: ${{ secrets.BOTCITY_KEY }}
+  BOTCITY_LOGIN: ${{ secrets.BOTCITY_LOGIN }}
+  BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        shell: bash
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ 3.8 ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Building the package
+        run: python setup.py sdist
+
+      - name: Downloading BotCLI
+        run: curl https://developers.botcity.dev/download/CLI_1.6.zip --output cli.zip
+
+      - name: Unzip file
+        run: |
+          sudo apt install unzip
+          unzip cli.zip
+          ls -lha 1.6
+        # generage 1.6 folder
+
+      - name: Echo variables in config file.
+        run: |
+          cat << EOT > 1.6/config.properties
+             organization=${{ env.BOTCITY_ORGANIZATION }}
+             workspace=${{ env.BOTCITY_ORGANIZATION }}
+             server=${{ env.BOTCITY_SERVER }}
+             login=${{ env.BOTCITY_LOGIN }}
+             key=${{ env.BOTCITY_KEY }}
+          EOT
+
+      - name: Echo variables in config file.
+        run: cat 1.6/config.properties
+
+      - name: Run command update in Botcity
+      run: java -jar botCLI.jar bot list

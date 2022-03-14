@@ -56,4 +56,6 @@ jobs:
         run: cat config.properties
 
       - name: Run command update in Botcity
-        run: java -jar botCLI.jar bot list
+        run: |
+          ls
+          java -jar botCLI.jar bot list

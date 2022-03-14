@@ -55,8 +55,11 @@ jobs:
       - name: Echo variables in config file.
         run: cat config.properties
 
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
       - name: Update bot
-        if: "${GITHUB_REF#refs/*/}" == "cicd-github" # cicd-github > main
+        if: ${ env.RELEASE_VERSION } == "cicd-github" # cicd-github > main
         run: |
           java -jar botCLI.jar bot deploy -version 1.0-${GITHUB_SHA::8} -botId "botDemoCiCd" -file dist/botDemoCiCd-1.0.tar.gz -python
           java -jar botCLI.jar bot release -botId "botDemoCiCd" -version 1.0-${GITHUB_SHA::8}

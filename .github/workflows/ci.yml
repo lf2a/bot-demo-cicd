@@ -40,7 +40,6 @@ jobs:
           sudo apt install unzip
           unzip cli.zip
           mv 1.6/* ./
-          rm 1.6
           ls -lha
 
       - name: Echo variables in config file.

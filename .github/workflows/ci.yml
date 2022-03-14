@@ -59,6 +59,7 @@ jobs:
         run: |
           ls -lha
           java -jar botCLI.jar bot list
+          echo ${GITHUB_SHA::8}
 
-#  java -jar ./botCli.jar bot update -version 1.0-${GITHUB_SHA::8} -botId "botDemoCiCd" -file "./dist/botDemoCiCd-1.0.tar.gz" -python
+#  java -jar ./botCli.jar bot update -version 1.0-${GITHUB_SHA::8} -botId "botDemoCiCd" -file dist/botDemoCiCd-1.0.tar.gz -python
 #  java -jar ./botCli.jar bot release -botId "botDemoCiCd" -version 1.0-${GITHUB_SHA::8}

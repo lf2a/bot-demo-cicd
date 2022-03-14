@@ -11,6 +11,7 @@ env:
   BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
   BRANCH_NAME: ${github.ref#refs/*/}
   BOT_VERSION: $(cat VERSION)
+  BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
 
 
 jobs:
@@ -23,11 +24,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      #      - name: Set env
-      #        run: |
-      #          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      #          echo "BOT_VERSION=$(cat VERSION)" >> $GITHUB_ENV
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -51,16 +47,6 @@ jobs:
           ls -lha
 
       - name: Echo variables in config file.
-        run: |
-          cat << EOT > config.properties
-             organization=${{ env.BOTCITY_ORGANIZATION }}
-             workspace=${{ env.BOTCITY_ORGANIZATION }}
-             server=${{ env.BOTCITY_SERVER }}
-             login=${{ env.BOTCITY_LOGIN }}
-             key=${{ env.BOTCITY_KEY }}
-          EOT
-
-      - name: Echo variables in config file.
         run: cat config.properties
 
       - name: Update bot
@@ -68,3 +54,7 @@ jobs:
         run: |
           java -jar botCLI.jar bot deploy -version ${{ env.BOT_VERSION }}-${GITHUB_SHA::8} -botId "botDemoCiCd" -file dist/botDemoCiCd-1.0.tar.gz -python
           java -jar botCLI.jar bot release -botId "botDemoCiCd" -version ${{ env.BOT_VERSION }}-${GITHUB_SHA::8}
+
+      - name: Run task
+        if: ${{ env.RELEASE_VERSION }} == "cicd-github" # cicd-github > main
+        run: java -jar botCLI.jar task create -activityLabel ${{ env.BOT_ACTIVITY }} -test

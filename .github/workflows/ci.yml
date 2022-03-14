@@ -56,10 +56,8 @@ jobs:
         run: cat config.properties
 
       - name: Update bot
-        run: |
-          ls -lha
-          java -jar botCLI.jar bot update -version 1.0-${GITHUB_SHA::8} -botId "botDemoCiCd" -file dist/botDemoCiCd-1.0.tar.gz -python
-          java -jar botCLI.jar bot release -botId "botDemoCiCd" -version 1.0-${GITHUB_SHA::8}
-
-#  java -jar ./botClI.jar bot update -version 1.0-${GITHUB_SHA::8} -botId "botDemoCiCd" -file dist/botDemoCiCd-1.0.tar.gz -python
-#  java -jar ./botClI.jar bot release -botId "botDemoCiCd" -version 1.0-${GITHUB_SHA::8}
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}"
+#        run: |
+#          ls -lha
+#          java -jar botCLI.jar bot update -version 1.0-${GITHUB_SHA::8} -botId "botDemoCiCd" -file dist/botDemoCiCd-1.0.tar.gz -python
+#          java -jar botCLI.jar bot release -botId "botDemoCiCd" -version 1.0-${GITHUB_SHA::8}

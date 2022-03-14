@@ -39,8 +39,8 @@ jobs:
         run: |
           sudo apt install unzip
           unzip cli.zip
-          cd 1.6/
-          ls -lha
+          mv 1.6 cli
+          ls -lha cli
 
       - name: Echo variables in config file.
         run: |
@@ -57,5 +57,5 @@ jobs:
 
       - name: Run command update in Botcity
         run: |
-          ls
+          cd cli
           java -jar botCLI.jar bot list

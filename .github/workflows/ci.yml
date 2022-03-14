@@ -12,16 +12,11 @@ env:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     defaults:
       run:
         shell: bash
-
-    strategy:
-      matrix:
-        os: [ ubuntu-latest ]
-        python-version: [ 3.8 ]
 
     steps:
       - uses: actions/checkout@v2
@@ -29,7 +24,7 @@ jobs:
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.8
 
       - name: Install Dependencies
         run: pip install -r requirements.txt

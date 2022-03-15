@@ -81,7 +81,7 @@ jobs:
           EOT
 
       - name: Deploy bot
-        if: echo "123" == '123'
+        if: $(echo "123") == '123'
         run: |
           echo ${{  env.BOT_NOT_EXISTS }}
           echo "nao existe"

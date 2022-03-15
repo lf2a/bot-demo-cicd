@@ -12,7 +12,7 @@ env:
   BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
 
   BRANCH_NAME: ${github.ref#refs/*/}
-  BOT_VERSION: $(cat VERSION)
+  BOT_VERSION: $(git describe --tags)
   BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
   MACHINE_ID: ${{ secrets.MACHINE_ID }}
   BOT_ID: botDemoCiCd
@@ -81,8 +81,7 @@ jobs:
           EOT
 
       - name: Deploy bot
-#        if: contains('BotId not found!', 'not found')
-        if: contains(env.BOT_NOT_EXISTS, 'not found')
+        if: echo "123" == '123'
         run: |
           echo ${{  env.BOT_NOT_EXISTS }}
           echo "nao existe"

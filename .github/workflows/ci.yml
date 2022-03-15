@@ -81,7 +81,7 @@ jobs:
           EOT
 
       - name: Deploy bot
-        if: env.BRANCH_NAME == 'cicd-github' && env.BOT_NOT_EXISTS != ''
+        if: env.BRANCH_NAME == 'cicd-github' && contains(env.BOT_NOT_EXISTS, 'BotId not found!')
         run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 
 

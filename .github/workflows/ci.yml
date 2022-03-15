@@ -81,8 +81,10 @@ jobs:
           EOT
 
       - name: Deploy bot
-        if: contains(env.BOT_NOT_EXISTS, 'BotId not found!')
-        run: echo ${{  env.BOT_NOT_EXISTS }}
+#        if: contains(env.BOT_NOT_EXISTS, 'BotId not found!')
+        run: |
+          echo ${{  env.BOT_NOT_EXISTS }}
+          echo contains(env.BOT_NOT_EXISTS, 'BotId not found!')
 #        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 
 

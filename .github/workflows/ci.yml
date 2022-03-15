@@ -19,7 +19,7 @@ env:
   BUILD_FILENAME: $(find dist/botDemoCiCd-*)
 
   # verificações
-  BOT_NOT_EXISTS: $(java -jar botCLI.jar bot list --bid=${BOT_ID} | grep "BotId")
+  BOT_NOT_EXISTS: $(java -jar botCLI.jar bot list --bid=${BOT_ID} | grep "BotId" || if [[ $? -eq 0 ]]; then exit 0; fi)
 
 
 jobs:
@@ -81,8 +81,8 @@ jobs:
           EOT
 
       - name: Deploy bot
-        if: ${{ env.BRANCH_NAME }} == "cicd-github" && ${{ env.BOT_NOT_EXISTS }} == "" # trocar para "main"
-        run: java -jar botCLI.jar bot list --bid=${{env.BOT_ID}}
+        if: ${{ env.BRANCH_NAME }} == "cicd-github" && ${{ env.BOT_NOT_EXISTS }} != "" # trocar para "main"
+        run: echo "Nao existe"
 #        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 
 

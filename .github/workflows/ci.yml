@@ -12,6 +12,7 @@ env:
   BRANCH_NAME: ${github.ref#refs/*/}
   BOT_VERSION: $(cat VERSION)
   BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
+  MACHINE_ID: ${{ secrets.MACHINE_ID }}
 
 
 jobs:
@@ -25,10 +26,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+
+      - name: Set up Java 11
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
 
       - name: Install Test Dependencies
         run: pip install -r requirements-tests.txt
@@ -77,3 +84,26 @@ jobs:
       - name: Run task
         if: ${{ env.RELEASE_VERSION }} == "cicd-github" # trocar para "main"
         run: java -jar botCLI.jar task create -activityLabel ${{ env.BOT_ACTIVITY }} -test
+
+      - name: Downloading BotCLI
+        run: curl https://www.dropbox.com/s/xe45mrnw8mjy3k9/runner.zip?dl=1 --output runner.zip --location
+
+      - name: Unzip file
+        run: |
+          unzip runner.zip
+          ls -lha
+
+      - name: Echo variables in config file.
+        run: |
+          cat << EOT > conf/conf.bfc
+             server=${{ env.BOTCITY_SERVER }}
+             login=${{ env.BOTCITY_LOGIN }}
+             key=${{ env.BOTCITY_KEY }}
+             machineId=${{ env.MACHINE_ID }}
+             logScreen=false
+             logApplication=false
+          EOT
+
+      - name: Running BotRunner
+        # timeout de 5min
+        run: timeout 300s java -Dfile.encoding=UTF-8 -jar botrunner-2.4.1.jar

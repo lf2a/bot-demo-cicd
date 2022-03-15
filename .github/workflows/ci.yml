@@ -82,7 +82,7 @@ jobs:
           EOT
 
       - name: Deploy bot
-        if:  ! git describe --tag
+        if: $(git describe --tag)
         run: |
           echo ${{ env.TEST }}
           echo "nao existe"

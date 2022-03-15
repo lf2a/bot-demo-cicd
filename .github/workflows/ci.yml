@@ -83,7 +83,7 @@ jobs:
           EOT
 
       - name: Deploy bot
-        if: contains(env.TEST2, 'No names found')
+        if: ${{ contains(env.TEST2, 'No names found') }}
         run: |
           echo ${{ env.TEST }}
           echo "nao existe"

@@ -34,7 +34,7 @@ jobs:
       - name: Set up Java 11
         uses: actions/setup-java@v2
         with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
+          distribution: 'temurin'
           java-version: '11'
 
       - name: Install Test Dependencies
@@ -95,7 +95,7 @@ jobs:
 
       - name: Echo variables in config file.
         run: |
-          cat << EOT > conf/conf.bfc
+          cat << EOT > conf/conf.bcf
              server=${{ env.BOTCITY_SERVER }}
              login=${{ env.BOTCITY_LOGIN }}
              key=${{ env.BOTCITY_KEY }}
@@ -106,4 +106,4 @@ jobs:
 
       - name: Running BotRunner
         # timeout de 5min
-        run: timeout 300s java -Dfile.encoding=UTF-8 -jar botrunner-2.4.1.jar
+        run: timeout 120s java -Dfile.encoding=UTF-8 -jar botrunner-2.4.1.jar

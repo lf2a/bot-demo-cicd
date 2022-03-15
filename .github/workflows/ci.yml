@@ -105,4 +105,4 @@ jobs:
           EOT
 
       - name: Running BotRunner
-        run: timeout -s SIGINT 2m java -Dfile.encoding=UTF-8 -jar botrunner-2.4.1.jar
+        run: (timeout 2m java -Dfile.encoding=UTF-8 -jar botrunner-2.4.1.jar; exit 0)

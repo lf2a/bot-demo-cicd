@@ -20,6 +20,7 @@ env:
 
   # verificações
   BOT_NOT_EXISTS: $(java -jar botCLI.jar bot list --bid=botDemoCiCd2 | grep "BotId" || if [[ $? -eq 0 ]]; then exit 0; fi)
+  TEST: $(echo '123')
 
 
 jobs:
@@ -81,7 +82,7 @@ jobs:
           EOT
 
       - name: Deploy bot
-        if: $(echo "123") == '123'
+        if: contains(env.TEST, '123')
         run: |
           echo ${{  env.BOT_NOT_EXISTS }}
           echo "nao existe"

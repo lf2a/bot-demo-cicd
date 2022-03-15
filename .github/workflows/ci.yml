@@ -44,22 +44,22 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - name: Install Bot Dependencies
-        run: |
-          pip install -r requirements-tests.txt
-          pip install -r requirements.txt
-
-      - name: Set up Firefox
-        uses: browser-actions/setup-firefox@latest
-
-      - name: Changing gecko-driver permissions
-        run: sudo chmod 755 botDemoCiCd/resources/geckodriver
-
-      - name: Run tests
-        run: pytest --headless botDemoCiCd
-
-      - name: Building the package
-        run: python setup.py sdist
+#      - name: Install Bot Dependencies
+#        run: |
+#          pip install -r requirements-tests.txt
+#          pip install -r requirements.txt
+#
+#      - name: Set up Firefox
+#        uses: browser-actions/setup-firefox@latest
+#
+#      - name: Changing gecko-driver permissions
+#        run: sudo chmod 755 botDemoCiCd/resources/geckodriver
+#
+#      - name: Run tests
+#        run: pytest --headless botDemoCiCd
+#
+#      - name: Building the package
+#        run: python setup.py sdist
 
       - name: Downloading BotCLI
         run: curl https://developers.botcity.dev/download/CLI_1.6.zip --output cli.zip
@@ -81,10 +81,10 @@ jobs:
           EOT
 
       - name: Deploy bot
-#        if: contains(env.BOT_NOT_EXISTS, 'BotId not found!')
+        if: contains('BotId not found!', 'not found')
+#        if: contains(env.BOT_NOT_EXISTS, 'not found')
         run: |
           echo ${{  env.BOT_NOT_EXISTS }}
-          echo contains(env.BOT_NOT_EXISTS, 'BotId not found!')
 #        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 
 

@@ -81,7 +81,7 @@ jobs:
           EOT
 
       - name: Deploy bot
-        if: ${{ env.BRANCH_NAME }} == "cicd-github" && $(java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "BotId" || if [[ $? -eq 0 ]]; then exit 0; fi) != "" # trocar para "main"
+        if: $(java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "BotId" || if [[ $? -eq 0 ]]; then exit 0; fi) == ""
         run: java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "BotId" || if [[ $? -eq 0 ]]; then exit 0; fi
 #        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 

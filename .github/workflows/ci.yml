@@ -20,7 +20,7 @@ env:
 
   # verificações
   BOT_NOT_EXISTS: $(java -jar botCLI.jar bot list --bid=botDemoCiCd2 | grep "BotId" || if [[ $? -eq 0 ]]; then exit 0; fi)
-  TEST: $(java -jar botCLI.jar bot list --bid=botDemoCiCd | grep 'Version')
+  TEST: java -jar botCLI.jar bot list --bid=botDemoCiCd | grep 'Version'
 
 
 jobs:

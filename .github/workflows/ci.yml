@@ -82,7 +82,7 @@ jobs:
           EOT
 
       - name: Deploy bot
-        if: contains(env.TEST, '1.0')
+        if: contains('1.0', env.TEST)
         run: |
           echo ${{ env.TEST }}
           echo "nao existe"

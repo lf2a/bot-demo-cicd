@@ -2,7 +2,11 @@ name: CI
 
 on:
   push:
+    branches:
+      - cicd-github
   pull_request:
+    branches:
+      - cicd-github
 
 env:
   BOTCITY_SERVER: ${{ secrets.BOTCITY_SERVER }}
@@ -10,6 +14,7 @@ env:
   BOTCITY_LOGIN: ${{ secrets.BOTCITY_LOGIN }}
   BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
   BRANCH_NAME: ${github.ref#refs/*/}
+  TAG: ${GITHUB_REF##*/}
   BOT_VERSION: $(cat VERSION)
   BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
 
@@ -59,6 +64,7 @@ jobs:
       - name: Update bot
         if: ${{ env.RELEASE_VERSION }} == "cicd-github" # trocar para "main"
         run: |
+          echo ${{ TAG }}
           java -jar botCLI.jar bot deploy -version ${{ env.BOT_VERSION }}-${GITHUB_SHA::8} -botId "botDemoCiCd" -file dist/botDemoCiCd-1.0.tar.gz -python
           java -jar botCLI.jar bot release -botId "botDemoCiCd" -version ${{ env.BOT_VERSION }}-${GITHUB_SHA::8}
 

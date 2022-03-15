@@ -82,7 +82,7 @@ jobs:
 
       - name: Deploy bot
 #        if: contains('BotId not found!', 'not found')
-        if: contains($($(java -jar botCLI.jar bot list --bid=botDemoCiCd2 | grep "BotId" || if [[ $? -eq 0 ]]; then exit 0; fi)), 'not found')
+        if: contains($(java -jar botCLI.jar bot list --bid=botDemoCiCd2 | grep "BotId" || if [[ $? -eq 0 ]]; then exit 0; fi), 'not found')
         run: |
           echo ${{  env.BOT_NOT_EXISTS }}
           echo "nao existe"

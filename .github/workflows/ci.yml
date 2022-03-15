@@ -19,7 +19,7 @@ env:
   BUILD_FILENAME: $(find dist/botDemoCiCd-*)
 
   # verificações
-  BOT_NOT_EXISTS: $(java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "ERROR:")
+  BOT_NOT_EXISTS: $(java -jar botCLI.jar bot list --bid=${{ BOT_ID }} | grep "BotId")
 
 
 jobs:

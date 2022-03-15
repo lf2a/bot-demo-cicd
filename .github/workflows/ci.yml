@@ -15,7 +15,7 @@ env:
   BOT_VERSION: $(cat VERSION)
   BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
   MACHINE_ID: ${{ secrets.MACHINE_ID }}
-  BOT_ID: botDemoCiCd
+  BOT_ID: botDemoCiCd2
   BUILD_FILENAME: $(find dist/botDemoCiCd-*)
 
   # verificações

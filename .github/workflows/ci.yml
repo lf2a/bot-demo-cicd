@@ -34,7 +34,7 @@ jobs:
         run: pip install -r requirements-tests.txt
 
       - name: Set up Firefox Ubuntu
-        uses: browser-actions/setup-firefox@98.0.1
+        uses: browser-actions/setup-firefox@98.0
 
       - name: Changing Ubuntu gecko-driver permissions
         run: sudo chmod 755 botDemoCiCd/resources/geckodriver

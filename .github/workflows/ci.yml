@@ -5,14 +5,21 @@ on:
   pull_request:
 
 env:
+  # credentials
   BOTCITY_SERVER: ${{ secrets.BOTCITY_SERVER }}
   BOTCITY_KEY: ${{ secrets.BOTCITY_KEY }}
   BOTCITY_LOGIN: ${{ secrets.BOTCITY_LOGIN }}
   BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
+
   BRANCH_NAME: ${github.ref#refs/*/}
   BOT_VERSION: $(cat VERSION)
   BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
   MACHINE_ID: ${{ secrets.MACHINE_ID }}
+  BOT_ID: botDemoCiCd
+  BUILD_FILENAME: $(find dist/botDemoCiCd-*)
+
+  # verificações
+  BOT_NOT_EXISTS: $(java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "ERROR:")
 
 
 jobs:
@@ -37,7 +44,7 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - name: Install Dependencies
+      - name: Install Bot Dependencies
         run: |
           pip install -r requirements-tests.txt
           pip install -r requirements.txt
@@ -73,33 +80,40 @@ jobs:
              key=${{ env.BOTCITY_KEY }}
           EOT
 
-      - name: Update bot
-        if: ${{ env.RELEASE_VERSION }} == "cicd-github" # trocar para "main"
-        run: |
-          java -jar botCLI.jar bot deploy -version ${{ env.BOT_VERSION }}+${GITHUB_SHA::8} -botId "botDemoCiCd" -file dist/botDemoCiCd-1.0.tar.gz -python
-          java -jar botCLI.jar bot release -botId "botDemoCiCd" -version ${{ env.BOT_VERSION }}+${GITHUB_SHA::8}
+      - name: Deploy bot
+        if: ${{ env.BRANCH_NAME }} == "cicd-github" and ${{ env.BOT_NOT_EXISTS }} != "" # trocar para "main"
+        run: echo "BOT NAO EXISTE"
+#        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 
-      - name: Run task
-        if: ${{ env.RELEASE_VERSION }} == "cicd-github" # trocar para "main"
-        run: java -jar botCLI.jar task create -activityLabel ${{ env.BOT_ACTIVITY }} -test
+#      - name: Release bot
+#        if: ${{ env.BRANCH_NAME }} == "cicd-github" # trocar para "main"
+#        run: java -jar botCLI.jar bot release -botId ${{ env.BOT_ID }} -version 1.0
 
-      - name: Downloading BotCLI
-        run: curl https://www.dropbox.com/s/xe45mrnw8mjy3k9/runner.zip?dl=1 --output runner.zip --location
+#      - name: Update bot
+#        if: ${{ env.BRANCH_NAME }} == "cicd-github" # trocar para "main"
+#        run: java -jar botCli.jar bot update -version 1.0 -botId ${{ env.BOT_ID }} -file -file ${{ env.BUILD_FILENAME }} -python
 
-      - name: Unzip file
-        run: |
-          unzip runner.zip
+#      - name: Run task
+#        if: ${{ env.BRANCH_NAME }} == "cicd-github" # trocar para "main"
+#        run: java -jar botCLI.jar task create -activityLabel ${{ env.BOT_ACTIVITY }} -test
 
-      - name: Echo variables in config file.
-        run: |
-          cat << EOT > conf/conf.bcf
-             server=${{ env.BOTCITY_SERVER }}
-             login=${{ env.BOTCITY_LOGIN }}
-             key=${{ env.BOTCITY_KEY }}
-             machineId=${{ env.MACHINE_ID }}
-             logScreen=false
-             logApplication=false
-          EOT
-
-      - name: Running BotRunner
-        run: java -Dfile.encoding=UTF-8 -jar botrunner-2.4.1.jar -single
+#      - name: Downloading BotRunner
+#        run: curl https://www.dropbox.com/s/xe45mrnw8mjy3k9/runner.zip?dl=1 --output runner.zip --location
+#
+#      - name: Unzip file
+#        run: |
+#          unzip runner.zip
+#
+#      - name: Echo variables in config file.
+#        run: |
+#          cat << EOT > conf/conf.bcf
+#             server=${{ env.BOTCITY_SERVER }}
+#             login=${{ env.BOTCITY_LOGIN }}
+#             key=${{ env.BOTCITY_KEY }}
+#             machineId=${{ env.MACHINE_ID }}
+#             logScreen=false
+#             logApplication=false
+#          EOT
+#
+#      - name: Running BotRunner
+#        run: java -Dfile.encoding=UTF-8 -jar botrunner-2.4.1.jar -single

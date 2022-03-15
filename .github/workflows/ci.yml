@@ -82,7 +82,7 @@ jobs:
 
       - name: Deploy bot
 #        if: contains('BotId not found!', 'not found')
-        if: contains(${env.BOT_NOT_EXISTS}, 'not found')
+        if: contains(${{env.BOT_NOT_EXISTS}}, 'not found')
         run: |
           echo ${{  env.BOT_NOT_EXISTS }}
 #        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python

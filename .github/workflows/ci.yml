@@ -37,20 +37,19 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - name: Install Test Dependencies
-        run: pip install -r requirements-tests.txt
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements-tests.txt
+          pip install -r requirements.txt
 
-      - name: Set up Firefox Ubuntu
+      - name: Set up Firefox
         uses: browser-actions/setup-firefox@latest
 
-      - name: Changing Ubuntu gecko-driver permissions
+      - name: Changing gecko-driver permissions
         run: sudo chmod 755 botDemoCiCd/resources/geckodriver
 
       - name: Run tests
         run: pytest --headless botDemoCiCd
-
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
 
       - name: Building the package
         run: python setup.py sdist
@@ -63,9 +62,8 @@ jobs:
           sudo apt install unzip
           unzip cli.zip
           mv 1.6/* ./
-          ls -lha
 
-      - name: Echo variables in config file.
+      - name: Echo variables in cli config file.
         run: |
           cat << EOT > config.properties
              organization=${{ env.BOTCITY_ORGANIZATION }}
@@ -91,7 +89,6 @@ jobs:
       - name: Unzip file
         run: |
           unzip runner.zip
-          ls -lha
 
       - name: Echo variables in config file.
         run: |
@@ -105,4 +102,4 @@ jobs:
           EOT
 
       - name: Running BotRunner
-        run: timeout 1m java -Dfile.encoding=UTF-8 -jar botrunner-2.4.1.jar || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
+        run: java -Dfile.encoding=UTF-8 -jar botrunner-2.4.1.jar -single

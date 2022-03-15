@@ -9,7 +9,7 @@ class Bot(WebBot):
     def action(self, execution=None):
         self.headless = True
         self.browser = Browser.FIREFOX
-        self.driver_path = self.get_resource_abspath(filename='geckodriver.exe')
+        self.driver_path = self.get_resource_abspath(filename='geckodriver')
 
         try:
             self.open_browser(url='https://lf2a.github.io/tests-botcity-framework-web-python/')

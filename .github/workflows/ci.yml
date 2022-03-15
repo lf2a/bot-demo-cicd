@@ -14,7 +14,7 @@ env:
   BOTCITY_LOGIN: ${{ secrets.BOTCITY_LOGIN }}
   BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
   BRANCH_NAME: ${github.ref#refs/*/}
-  TAG: ${GITHUB_REF##*/}
+  TAG: ${github.ref##*/}
   BOT_VERSION: $(cat VERSION)
   BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
 

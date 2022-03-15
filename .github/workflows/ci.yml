@@ -82,8 +82,26 @@ jobs:
 
       - name: Deploy bot
         if: ${{ env.BRANCH_NAME }} == "cicd-github" && ${{ env.BOT_NOT_EXISTS }} == "" # trocar para "main"
-        run: ${{ env.BOT_NOT_EXISTS }}
+        run: java -jar botCLI.jar bot list --bid=${{env.BOT_ID}} | grep "BotId"
 #        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #      - name: Release bot
 #        if: ${{ env.BRANCH_NAME }} == "cicd-github" # trocar para "main"

@@ -84,21 +84,11 @@ jobs:
 
       - name: Make validations
         run: |
-          
-          
-          
-          # if [[ $repo_version -eq "No names found, cannot describe anything." ]]; then
-          #   echo "Repo ainda não possui versão"
-          #   echo "HAS_TAG=0" >> $GITHUB_ENV
-          # else
-          #   echo "HAS_TAG=1" >> $GITHUB_ENV
-          # fi
-          
           if git describe --tags && [[ $? -ne 0 ]]; then
             echo "nao passa"
           else
             repo_version=${{ env.TEST2 }}
-            if java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "Version: $repo_version" || [[ $? -eq 0 ]]; then
+            if java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "Version: $repo_version" && [[ $? -eq 0 ]]; then
               echo "Versão encontrada: $repo_version"
               echo "DEPLOYED=1" >> $GITHUB_ENV
             else

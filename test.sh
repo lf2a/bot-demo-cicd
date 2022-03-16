@@ -8,7 +8,7 @@ repo_version=$(cd ../projetos/dev/bot-demo-with-ci-cd && git describe --tag)
 #  echo "DEPLOYED=0"
 #fi
 
-if $repo_version || [[ $? -ne 0 ]]; then
+if $repo_version && [[ $? -ne 0 ]]; then
   echo "nao passa"
 else
 #  repo_version=$(git describe --tags)
@@ -18,3 +18,4 @@ else
     echo "Versão encontrada2: $repo_version"
   fi
 fi
+echo $?

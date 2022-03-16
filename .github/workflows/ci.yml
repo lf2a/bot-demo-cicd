@@ -12,7 +12,7 @@ env:
   BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
 
   BRANCH_NAME: ${github.ref#refs/*/}
-  BOT_VERSION: $(git describe --tags || if [[ $? -eq 0 ]]; then exit 0; fi)
+  BOT_VERSION: $( git describe --tags $(git rev-list --tags --max-count=1) || if [[ $? -eq 0 ]]; then exit 0; fi)
   BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
   MACHINE_ID: ${{ secrets.MACHINE_ID }}
   BOT_ID: botDemoCiCd
@@ -84,7 +84,7 @@ jobs:
 
       - name: Make validations
         run: |
-          if git describe --tags && [[ $? -ne 0 ]]; then
+          if git describe --tags $(git rev-list --tags --max-count=1) && [[ $? -ne 0 ]]; then
             echo "nao passa"
           else
             repo_version=${{ env.BOT_VERSION }}

@@ -12,7 +12,7 @@ env:
   BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
 
   BRANCH_NAME: ${github.ref#refs/*/}
-  BOT_VERSION: $(git describe --tags)
+  BOT_VERSION: $(git describe --tags)#v*
   BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
   MACHINE_ID: ${{ secrets.MACHINE_ID }}
   BOT_ID: botDemoCiCd
@@ -104,7 +104,7 @@ jobs:
         # verifica se foi nao lancada a tag no repo e verifica se a versão nao está no maestro
 #        if: github.ref == 'refs/heads/cicd-github' && ${{ env.HAS_TAG == 'true' }} && ${{ env.DEPLOYED == 'false' }}
 #        run: echo "fazendo deploy"
-        run: echo ${{ env.BOT_VERSION#v }}
+        run: echo ${{ env.BOT_VERSION }}
 #        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 
       - name: Release bot

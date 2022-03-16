@@ -96,6 +96,7 @@ jobs:
             echo "Versão encontrada: $repo_version"
             echo "DEPLOYED=1" >> $GITHUB_ENV
           else
+            echo "Versão encontrada: $repo_version"
             echo "DEPLOYED=0" >> $GITHUB_ENV
           fi
 

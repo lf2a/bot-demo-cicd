@@ -104,7 +104,7 @@ jobs:
         # verifica se foi nao lancada a tag no repo e verifica se a versão nao está no maestro
 #        if: github.ref == 'refs/heads/cicd-github' && ${{ env.HAS_TAG == 'true' }} && ${{ env.DEPLOYED == 'false' }}
 #        run: echo "fazendo deploy"
-        run: echo ${{ env.BOT_VERSION#v* }}
+        run: echo ${{ env.BOT_VERSION#v }}
 #        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 
       - name: Release bot

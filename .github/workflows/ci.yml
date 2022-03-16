@@ -1,5 +1,5 @@
-name: CI
 
+name: CI
 on:
   push:
   pull_request:
@@ -21,7 +21,7 @@ env:
   # verificações
   BOT_NOT_EXISTS: $(java -jar botCLI.jar bot list --bid=botDemoCiCd2 | grep "BotId" || if [[ $? -eq 0 ]]; then exit 0; fi)
   TEST: java -jar botCLI.jar bot list --bid=botDemoCiCd | grep 'Version'
-  TEST2: $(git describe --tag)
+  TEST2: git describe --tag
 
 
 jobs:
@@ -83,37 +83,35 @@ jobs:
           EOT
 
       - name: Deploy bot
-        if: ${{ contains(env.TEST2, 'No names found') }}
+        if: contains(env.TEST2, 'names')
         run: |
           echo ${{ env.TEST }}
           echo "nao existe"
 #        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#      - name: Release bot
-#        if: ${{ env.BRANCH_NAME }} == "cicd-github" # trocar para "main"
+      - name: Release bot
+        if: github.ref == 'refs/heads/cicd-github' || startsWith(github.ref, 'refs/tags')
+        run: echo "release bot"
 #        run: java -jar botCLI.jar bot release -botId ${{ env.BOT_ID }} -version 1.0
 
-#      - name: Update bot
-#        if: ${{ env.BRANCH_NAME }} == "cicd-github" # trocar para "main"
+      - name: Update bot
+        if: github.ref == 'refs/heads/cicd-github' || startsWith(github.ref, 'refs/tags')
+        run: echo "update bot"
 #        run: java -jar botCli.jar bot update -version 1.0 -botId ${{ env.BOT_ID }} -file -file ${{ env.BUILD_FILENAME }} -python
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #      - name: Run task
 #        if: ${{ env.BRANCH_NAME }} == "cicd-github" # trocar para "main"

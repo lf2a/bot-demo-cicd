@@ -12,7 +12,7 @@ env:
   BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
 
   BRANCH_NAME: ${github.ref#refs/*/}
-  BOT_VERSION: $(git describe --tags)
+  BOT_VERSION: $(git describe --tags || if [[ $? -eq 0 ]]; then exit 0; fi)
   BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
   MACHINE_ID: ${{ secrets.MACHINE_ID }}
   BOT_ID: botDemoCiCd
@@ -86,7 +86,7 @@ jobs:
         run: |
           repo_version=${{ env.BOT_VERSION }}
           
-          if [[ $? -ne 0 ]] || $repo_version -eq *"describe"*; then
+          if $repo_version -eq *"describe"*; then
             echo "Repo ainda não possui versão"
             echo "HAS_TAG=0" >> $GITHUB_ENV
           else

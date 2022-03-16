@@ -1,27 +1,19 @@
-
 name: CI
 on:
   push:
   pull_request:
 
 env:
-  # credentials
   BOTCITY_SERVER: ${{ secrets.BOTCITY_SERVER }}
   BOTCITY_KEY: ${{ secrets.BOTCITY_KEY }}
   BOTCITY_LOGIN: ${{ secrets.BOTCITY_LOGIN }}
   BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
 
-  BRANCH_NAME: ${github.ref#refs/*/}
   BOT_VERSION: $(git describe --tags $(git rev-list --tags --max-count=1) || if [[ $? -eq 0 ]]; then exit 0; fi)
   BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
   MACHINE_ID: ${{ secrets.MACHINE_ID }}
   BOT_ID: botDemoCiCd
   BUILD_FILENAME: $(find dist/botDemoCiCd-*)
-
-  # verificações
-  BOT_NOT_EXISTS: $(java -jar botCLI.jar bot list --bid=botDemoCiCd2 | grep "BotId" || if [[ $? -eq 0 ]]; then exit 0; fi)
-  TEST: java -jar botCLI.jar bot list --bid=botDemoCiCd | grep 'Version'
-  TEST2: $(git describe --tags)
 
 
 jobs:
@@ -48,22 +40,22 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-#      - name: Install Bot Dependencies
-#        run: |
-#          pip install -r requirements-tests.txt
-#          pip install -r requirements.txt
-#
-#      - name: Set up Firefox
-#        uses: browser-actions/setup-firefox@latest
-#
-#      - name: Changing gecko-driver permissions
-#        run: sudo chmod 755 botDemoCiCd/resources/geckodriver
-#
-#      - name: Run tests
-#        run: pytest --headless botDemoCiCd
-#
-#      - name: Building the package
-#        run: python setup.py sdist
+      #      - name: Install Bot Dependencies
+      #        run: |
+      #          pip install -r requirements-tests.txt
+      #          pip install -r requirements.txt
+      #
+      #      - name: Set up Firefox
+      #        uses: browser-actions/setup-firefox@latest
+      #
+      #      - name: Changing gecko-driver permissions
+      #        run: sudo chmod 755 botDemoCiCd/resources/geckodriver
+      #
+      #      - name: Run tests
+      #        run: pytest --headless botDemoCiCd
+      #
+      #      - name: Building the package
+      #        run: python setup.py sdist
 
       - name: Downloading BotCLI
         run: curl https://developers.botcity.dev/download/CLI_1.6.zip --output cli.zip
@@ -86,37 +78,37 @@ jobs:
 
       - name: Make validations
         run: |
+          # verifica se tem alguma tag
           if git describe --tags $(git rev-list --tags --max-count=1) && [[ $? -ne 0 ]]; then
             echo "nao passa"
           else
             repo_version=${{ env.BOT_VERSION }}
+            # verifica a a versao ja foi lancada no maestro
             if java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "Version: $repo_version" || [[ $? -eq 0 ]]; then
-              echo "Já foi feito deploy"
+              echo "Já foi feito deploy."
               echo "DEPLOYED=1" >> $GITHUB_ENV
             else
-              echo "Fazer deploy"
+              echo "Fazer deploy."
               echo "DEPLOYED=0" >> $GITHUB_ENV
             fi
           fi
 
 
       - name: Deploy bot
-        # verifica se foi nao lancada a tag no repo e verifica se a versão nao está no maestro
         if: github.ref == 'refs/heads/cicd-github' && env.DEPLOYED == 0
-        run: echo "fazendo deploy ${{ env.DEPLOYED }}"
-#        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
+        run: echo "fazendo deploy ${{ env.DEPLOYED }} ${{ env.BUILD_FILENAME }}"
+        #run: java -jar botCLI.jar bot deploy -version ${{ env.BOT_VERSION }} -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 
       - name: Release bot
-        if: github.ref == 'refs/heads/cicd-github' || startsWith(github.ref, 'refs/tags')
+        if: github.ref == 'refs/heads/cicd-github' || startsWith(github.ref, 'refs/tags') && env.DEPLOYED == 0
         run: echo "release bot"
-#        run: java -jar botCLI.jar bot release -botId ${{ env.BOT_ID }} -version 1.0
+        #run: java -jar botCLI.jar bot release -botId ${{ env.BOT_ID }} -version ${{ env.BOT_VERSION }}
 
       - name: Update bot
-        if: (github.ref == 'refs/heads/cicd-github' || startsWith(github.ref, 'refs/tags'))
-        run: |
-          echo "update bot"
-          git describe --tag
-#        run: java -jar botCli.jar bot update -version 1.0 -botId ${{ env.BOT_ID }} -file -file ${{ env.BUILD_FILENAME }} -python
+        if: (github.ref == 'refs/heads/cicd-github' || startsWith(github.ref, 'refs/tags')) && env.DEPLOYED == 1
+        run: echo "update bot"
+        #run: java -jar botCli.jar bot update -version ${{ env.BOT_VERSION }} -botId ${{ env.BOT_ID }} -file -file ${{ env.BUILD_FILENAME }} -python
+
 
 
 
@@ -133,7 +125,7 @@ jobs:
 
 
 #      - name: Run task
-#        if: ${{ env.BRANCH_NAME }} == "cicd-github" # trocar para "main"
+#        if: github.ref == 'refs/heads/cicd-github' # trocar para "main"
 #        run: java -jar botCLI.jar task create -activityLabel ${{ env.BOT_ACTIVITY }} -test
 
 #      - name: Downloading BotRunner

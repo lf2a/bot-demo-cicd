@@ -12,7 +12,7 @@ env:
   BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
 
   BRANCH_NAME: ${github.ref#refs/*/}
-  BOT_VERSION: $(git describe --tags)#v*
+  BOT_VERSION: $(git describe --tags)
   BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
   MACHINE_ID: ${{ secrets.MACHINE_ID }}
   BOT_ID: botDemoCiCd
@@ -84,16 +84,15 @@ jobs:
 
       - name: Make validations
         run: |
-          git describe --tag
-          if [[ $? -ne 0 ]]; then
+          if git describe --tag || [[ $? -ne 0 ]]; then
             echo "Repo ainda não possui versão"
             echo "HAS_TAG=false" >> $GITHUB_ENV
           else
             echo "HAS_TAG=true" >> $GITHUB_ENV
           fi
           
-          java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "Version: ${{ env.BOT_VERSION }}"
-          if [[ $? -eq 0 ]]; then
+          
+          if java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "Version: ${{ env.BOT_VERSION }}" || [[ $? -eq 0 ]]; then
             echo "Versão encontrada (${{ env.BOT_VERSION }}) no maestro"
             echo "DEPLOYED=true" >> $GITHUB_ENV
           else

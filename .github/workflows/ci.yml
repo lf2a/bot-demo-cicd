@@ -96,7 +96,9 @@ jobs:
 
       - name: Deploy bot
         if: github.ref == 'refs/heads/cicd-github' && env.DEPLOYED == 0
-        run: echo "fazendo deploy ${{ env.DEPLOYED }} ${{ env.BUILD_FILENAME }}"
+        run: |
+          ls -lha
+          echo "fazendo deploy ${{ env.DEPLOYED }} ${{ env.BUILD_FILENAME }}"
         #run: java -jar botCLI.jar bot deploy -version ${{ env.BOT_VERSION }} -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 
       - name: Release bot

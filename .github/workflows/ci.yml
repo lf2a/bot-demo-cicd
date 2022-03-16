@@ -101,7 +101,7 @@ jobs:
       - name: Deploy bot
         # verifica se foi nao lancada a tag no repo e verifica se a versão nao está no maestro
         if: github.ref == 'refs/heads/cicd-github' && env.DEPLOYED == 0
-        run: echo "fazendo deploy"
+        run: echo "fazendo deploy ${{ env.DEPLOYED }}"
 #        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 
       - name: Release bot
@@ -110,8 +110,10 @@ jobs:
 #        run: java -jar botCLI.jar bot release -botId ${{ env.BOT_ID }} -version 1.0
 
       - name: Update bot
-        if: github.ref == 'refs/heads/cicd-github' || startsWith(github.ref, 'refs/tags')
-        run: echo "update bot"
+        if: (github.ref == 'refs/heads/cicd-github' || startsWith(github.ref, 'refs/tags'))
+        run: |
+          echo "update bot"
+          git describe --tag
 #        run: java -jar botCli.jar bot update -version 1.0 -botId ${{ env.BOT_ID }} -file -file ${{ env.BUILD_FILENAME }} -python
 
 

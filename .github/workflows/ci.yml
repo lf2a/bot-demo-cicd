@@ -106,8 +106,8 @@ jobs:
 
       - name: Update bot
         if: (github.ref == 'refs/heads/cicd-github' || startsWith(github.ref, 'refs/tags')) && env.DEPLOYED == 1
-        run: echo "update bot"
-        #run: java -jar botCli.jar bot update -version ${{ env.BOT_VERSION }} -botId ${{ env.BOT_ID }} -file -file ${{ env.BUILD_FILENAME }} -python
+#        run: echo "update bot"
+        run: java -jar botCli.jar bot update -version ${{ env.BOT_VERSION }} -botId ${{ env.BOT_ID }} -file -file ${{ env.BUILD_FILENAME }} -python
 
 
 

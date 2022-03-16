@@ -82,9 +82,29 @@ jobs:
              key=${{ env.BOTCITY_KEY }}
           EOT
 
+      - name: Make validations
+        run: |
+          if git describe --tag == *"describe"*; then
+            echo "Repo ainda não possui versão"
+            echo "::set-env name=HAS_TAG::false"
+          else
+            echo "::set-env name=HAS_TAG::true"
+          fi
+          
+          java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "Version: ${{ env.BOT_VERSION }}"
+          if [[ $? -eq 0 ]]; then
+            echo "Versão encontrada (${{ env.BOT_VERSION }}) no maestro"
+            echo "::set-env name=DEPLOYED::true"
+          else
+            echo "::set-env name=DEPLOYED::false"
+          fi
+
+
       - name: Deploy bot
-        if: contains(env.TEST2, 'describe')
-        run: echo "nao existe"
+        # verifica se foi nao lancada a tag no repo e verifica se a versão nao está no maestro
+#        if: github.ref == 'refs/heads/cicd-github' && ${{ env.HAS_TAG == 'true' }} && ${{ env.DEPLOYED == 'false' }}
+#        run: echo "fazendo deploy"
+        run: echo ${{ env.BOT_VERSION#v* }}
 #        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 
       - name: Release bot

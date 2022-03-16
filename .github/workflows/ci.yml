@@ -40,11 +40,11 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      #      - name: Install Bot Dependencies
-      #        run: |
-      #          pip install -r requirements-tests.txt
-      #          pip install -r requirements.txt
-      #
+      - name: Install Bot Dependencies
+        run: |
+          pip install -r requirements-tests.txt
+          pip install -r requirements.txt
+
       #      - name: Set up Firefox
       #        uses: browser-actions/setup-firefox@latest
       #
@@ -54,8 +54,8 @@ jobs:
       #      - name: Run tests
       #        run: pytest --headless botDemoCiCd
       #
-      #      - name: Building the package
-      #        run: python setup.py sdist
+      - name: Building the package
+        run: python setup.py sdist
 
       - name: Downloading BotCLI
         run: curl https://developers.botcity.dev/download/CLI_1.6.zip --output cli.zip

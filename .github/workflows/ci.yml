@@ -84,9 +84,7 @@ jobs:
 
       - name: Deploy bot
         if: contains(env.TEST2, 'describe')
-        run: |
-          echo ${{ env.TEST }}
-          echo "nao existe"
+        run: echo "nao existe"
 #        run: java -jar botCLI.jar bot deploy -version 1.0 -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python
 
       - name: Release bot

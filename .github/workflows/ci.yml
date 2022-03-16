@@ -94,7 +94,7 @@ jobs:
           #   echo "HAS_TAG=1" >> $GITHUB_ENV
           # fi
           
-          if git describe --tags || [[ $? -ne 0 ]]; then
+          if git describe --tags && [[ $? -ne 0 ]]; then
             echo "nao passa"
           else
             repo_version=${{ env.TEST2 }}

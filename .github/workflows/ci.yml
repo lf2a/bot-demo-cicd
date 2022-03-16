@@ -91,8 +91,8 @@ jobs:
             echo "HAS_TAG=1" >> $GITHUB_ENV
           fi
           
-          if java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "Version: ${{ env.BOT_VERSION }}" || [[ $? -eq 0 ]]; then
-            echo "Versão encontrada (${ env.BOT_VERSION }) no maestro"
+          if java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "Version: "${{ env.BOT_VERSION }} || [[ $? -eq 0 ]]; then
+            echo "Versão encontrada: " ${{ env.BOT_VERSION }}
             echo "DEPLOYED=1" >> $GITHUB_ENV
           else
             echo "DEPLOYED=0" >> $GITHUB_ENV

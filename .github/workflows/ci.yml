@@ -9,8 +9,7 @@ env:
   BOTCITY_LOGIN: ${{ secrets.BOTCITY_LOGIN }}
   BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
 
-  BOT_VERSION: 1.0
-#  BOT_VERSION: $(git describe --tags $(git rev-list --tags --max-count=1) || if [[ $? -eq 0 ]]; then exit 0; fi)
+  BOT_VERSION: $(git describe --tags $(git rev-list --tags --max-count=1) || if [[ $? -eq 0 ]]; then exit 0; fi)
   BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
   MACHINE_ID: ${{ secrets.MACHINE_ID }}
   BOT_ID: botDemoCiCd
@@ -80,9 +79,9 @@ jobs:
       - name: Make validations
         run: |
           # verifica se tem alguma tag
-          # if git describe --tags $(git rev-list --tags --max-count=1) && [[ $? -ne 0 ]]; then
-          #   echo "nao passa"
-          # else
+          if git describe --tags $(git rev-list --tags --max-count=1) && [[ $? -ne 0 ]]; then
+            echo "nao passa"
+          else
             repo_version=${{ env.BOT_VERSION }}
             # verifica a a versao ja foi lancada no maestro
             if java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "Version: $repo_version" || [[ $? -eq 0 ]]; then
@@ -92,7 +91,7 @@ jobs:
               echo "Fazer deploy."
               echo "DEPLOYED=0" >> $GITHUB_ENV
             fi
-          # fi
+          fi
 
 
       - name: Deploy bot

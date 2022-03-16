@@ -94,7 +94,7 @@ jobs:
           #   echo "HAS_TAG=1" >> $GITHUB_ENV
           # fi
           
-          if [[ $? -ne 0 ]]; then
+          if git describe --tags || [[ $? -ne 0 ]]; then
             echo "nao passa"
           else
             if java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "Version: $repo_version" || [[ $? -eq 0 ]]; then

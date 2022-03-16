@@ -84,7 +84,8 @@ jobs:
 
       - name: Make validations
         run: |
-          if git describe --tag == *"describe"*; then
+          git describe --tag
+          if [[ $? -ne 0 ]]; then
             echo "Repo ainda não possui versão"
             echo "HAS_TAG=false" >> $GITHUB_ENV
           else

@@ -86,7 +86,7 @@ jobs:
         run: |
           repo_version=${{ env.BOT_VERSION }}
           
-          if $repo_version -eq *"describe"* || [[ $? -ne 0 ]]; then
+          if [[ $? -ne 0 ]] || $repo_version -eq *"describe"*; then
             echo "Repo ainda não possui versão"
             echo "HAS_TAG=0" >> $GITHUB_ENV
           else

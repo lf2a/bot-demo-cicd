@@ -116,6 +116,7 @@ jobs:
 
 
 
+
 #      - name: Run task
 #        if: github.ref == 'refs/heads/cicd-github' # trocar para "main"
 #        run: java -jar botCLI.jar task create -activityLabel ${{ env.BOT_ACTIVITY }} -test

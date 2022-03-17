@@ -86,7 +86,7 @@ jobs:
             echo "Repo possui tag: $repo_version"
           
             # verifica a a versao ja foi lancada no maestro
-            if (java -jar botCLI.jar bot list --bid="${{ env.BOT_ID }}" | grep "Version: $repo_version" || [[ $? -eq 0 ]]); then
+            if (java -jar botCLI.jar bot list --bid="${{ env.BOT_ID }}" | grep "^Version: $repo_version $" || [[ $? -eq 0 ]]); then
               echo "Versão $repo_version do bot ${{ env.BOT_ID }} já está na plataforma."
               echo "DEPLOYED=1" >>$GITHUB_ENV
             else

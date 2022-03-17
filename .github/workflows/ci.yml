@@ -80,7 +80,7 @@ jobs:
       - name: Make validations
         run: |
           # verifica se tem alguma tag
-          if git describe --tags $(git rev-list --tags --max-count=1) || [[ $? -ne 0 ]]; then
+          if git describe --tags $(git rev-list --tags --max-count=1) && [[ $? -eq 128 ]]; then
             echo "Repo sem tags"
           else
             repo_version=${{ env.BOT_VERSION }}

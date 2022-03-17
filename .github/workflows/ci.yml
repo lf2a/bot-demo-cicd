@@ -97,7 +97,7 @@ jobs:
 
 
       - name: Deploy bot
-        if: github.ref == 'refs/heads/cicd-github' && env.DEPLOYED == 0
+        if: (github.ref == 'refs/heads/cicd-github' || startsWith(github.ref, 'refs/tags')) && env.DEPLOYED == 0
         run: |
           echo "Deploying: ${{ env.BOT_ID }} - ${{ env.BOT_VERSION }} - ${{ env.BUILD_FILENAME }}"
           java -jar botCLI.jar bot deploy -version ${{ env.BOT_VERSION }} -botId "botDemoCiCd" -file ${{ env.BUILD_FILENAME }} -python

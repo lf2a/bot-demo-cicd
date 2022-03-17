@@ -1,3 +1,5 @@
+import platform
+
 from botcity.web import WebBot, Browser, By
 
 from botcity.maestro import AutomationTaskFinishStatus as FinishStatus
@@ -6,10 +8,15 @@ from . import exceptions
 
 
 class Bot(WebBot):
+
     def action(self, execution=None):
+        os_name = platform.system()
         self.headless = True
         self.browser = Browser.FIREFOX
-        self.driver_path = self.get_resource_abspath(filename='geckodriver')
+        if os_name == 'Linux':
+            self.driver_path = self.get_resource_abspath(filename='geckodriver')
+        else:
+            self.driver_path = self.get_resource_abspath(filename='geckodriver.exe')
 
         try:
             self.open_browser(url='https://lf2a.github.io/tests-botcity-framework-web-python/')

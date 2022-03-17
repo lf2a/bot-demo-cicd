@@ -14,6 +14,7 @@ env:
   MACHINE_ID: ${{ secrets.MACHINE_ID }}
   BOT_ID: botDemoCiCd
   BUILD_FILENAME: $(find dist/botDemoCiCd-*)
+  DEPLOYED: -1
 
 
 jobs:
@@ -45,15 +46,15 @@ jobs:
           pip install -r requirements-tests.txt
           pip install -r requirements.txt
 
-      #      - name: Set up Firefox
-      #        uses: browser-actions/setup-firefox@latest
-      #
-      #      - name: Changing gecko-driver permissions
-      #        run: sudo chmod 755 botDemoCiCd/resources/geckodriver
-      #
-      #      - name: Run tests
-      #        run: pytest --headless botDemoCiCd
-      #
+      - name: Set up Firefox
+        uses: browser-actions/setup-firefox@latest
+
+      - name: Changing gecko-driver permissions
+        run: sudo chmod 755 botDemoCiCd/resources/geckodriver
+
+      - name: Run tests
+        run: pytest --headless botDemoCiCd
+
       - name: Building the package
         run: python setup.py sdist
 

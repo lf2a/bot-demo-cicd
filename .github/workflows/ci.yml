@@ -9,7 +9,7 @@ env:
   BOTCITY_LOGIN: ${{ secrets.BOTCITY_LOGIN }}
   BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
 
-  BOT_VERSION: $(git describe --tags $(git rev-list --tags --max-count=1) || if [[ $? -eq 0 ]]; then exit 0; fi)
+  BOT_VERSION: $(git describe --tags $(git rev-list --tags --max-count=1) || if [[ $? -ne 0 ]]; then exit 0; fi)
   BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
   MACHINE_ID: ${{ secrets.MACHINE_ID }}
   BOT_ID: botDemoCiCd
@@ -79,20 +79,19 @@ jobs:
 
       - name: Make validations
         run: |
-          # verifica se tem alguma tag
-          if git describe --tags $(git rev-list --tags --max-count=1) && [[ $? -eq 128 ]]; then
-            echo "Repo sem tags"
+          if [[ ${{ env.BOT_VERSION }} == "" ]]; then
+            echo "Repo não possui tag"
           else
-            repo_version=${{ env.BOT_VERSION }}
-            repo_version=$(echo $repo_version | cut -d'v' -f 2) # removendo o 'v' da versao (ex. v1.0.0)
+            repo_version=$(echo "${{ env.BOT_VERSION }}" | cut -d'v' -f 2) # removendo o 'v' da versao (ex. v1.0.0)
+            echo "Repo possui tag: $repo_version"
           
             # verifica a a versao ja foi lancada no maestro
-            if [[ -z "$repo_version" ]] && ( java -jar botCLI.jar bot list --bid=${{ env.BOT_ID }} | grep "Version: $repo_version" || [[ $? -eq 0 ]] ); then
+            if (java -jar botCLI.jar bot list --bid="${{ env.BOT_ID }}" | grep "Version: $repo_version" || [[ $? -eq 0 ]]); then
               echo "Versão $repo_version do bot ${{ env.BOT_ID }} já está na plataforma."
-              echo "DEPLOYED=1" >> $GITHUB_ENV
+              echo "DEPLOYED=1" >>$GITHUB_ENV
             else
               echo "Versão $repo_version do bot ${{ env.BOT_ID }} ainda não está na plataforma."
-              echo "DEPLOYED=0" >> $GITHUB_ENV
+              echo "DEPLOYED=0" >>$GITHUB_ENV
             fi
           fi
 

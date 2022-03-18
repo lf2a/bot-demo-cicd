@@ -1,24 +1,25 @@
-name: CI
+name: CI-CD
+
 on:
   push:
   pull_request:
 
 env:
+  # cli credentials
   BOTCITY_SERVER: ${{ secrets.BOTCITY_SERVER }}
   BOTCITY_KEY: ${{ secrets.BOTCITY_KEY }}
   BOTCITY_LOGIN: ${{ secrets.BOTCITY_LOGIN }}
   BOTCITY_ORGANIZATION: ${{ secrets.BOTCITY_ORGANIZATION }}
 
+  # repo info
   BOT_VERSION: $(git describe --tags $(git rev-list --tags --max-count=1) || if [[ $? -ne 0 ]]; then exit 0; fi)
-  BOT_ACTIVITY: ${{ secrets.BOT_ACTIVITY }}
-  MACHINE_ID: ${{ secrets.MACHINE_ID }}
   BOT_ID: botDemoCiCd
   BUILD_FILENAME: $(find dist/botDemoCiCd-*)
   DEPLOYED: -1
 
 
 jobs:
-  build:
+  ci-cd:
     runs-on: ubuntu-latest
 
     defaults:
@@ -94,7 +95,6 @@ jobs:
               echo "DEPLOYED=0" >>$GITHUB_ENV
             fi
           fi
-
 
       - name: Deploy bot
         if: (github.ref == 'refs/heads/cicd-github' || startsWith(github.ref, 'refs/tags')) && env.DEPLOYED == 0

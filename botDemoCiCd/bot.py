@@ -22,6 +22,8 @@ class Bot(WebBot):
             self.open_browser(url='https://lf2a.github.io/tests-botcity-framework-web-python/')
             self.print_result()
 
+            print(f"{execution.task_id} {execution.server} {execution.token} {execution.parameters}")
+
             if execution:
                 self.finish_task(FinishStatus.SUCCESS, f"Task Finished with success.", execution.task_id)
         except Exception as e:

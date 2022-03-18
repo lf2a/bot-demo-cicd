@@ -53,6 +53,7 @@ class Bot(WebBot):
         element = self.find_element(selector='element-result', by=By.ID)
         assert element.text == '{"data":["img04"]}'
         print(element.text)
+        print("updated!")
 
 
 if __name__ == '__main__':

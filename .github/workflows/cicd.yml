@@ -81,17 +81,17 @@ jobs:
       - name: Make validations
         run: |
           if [[ ${{ env.BOT_VERSION }} == "" ]]; then
-            echo "Repo não possui tag"
+            echo "Repo has no tag"
           else
             repo_version=$(echo "${{ env.BOT_VERSION }}" | cut -d'v' -f 2) # removendo o 'v' da versao (ex. v1.0.0)
-            echo "Repo possui tag: $repo_version"
+            echo "Tag: $repo_version"
           
             # verifica a a versao ja foi lancada no maestro
             if (java -jar botCLI.jar bot list --bid="${{ env.BOT_ID }}" | grep "^Version: ${{ env.BOT_VERSION }} $" || [[ $? -eq 0 ]]); then
-              echo "Versão $repo_version do bot ${{ env.BOT_ID }} já está na plataforma."
+              echo "Version $repo_version do bot ${{ env.BOT_ID }} is already on the platform."
               echo "DEPLOYED=1" >>$GITHUB_ENV
             else
-              echo "Versão $repo_version do bot ${{ env.BOT_ID }} ainda não está na plataforma."
+              echo "Version $repo_version do bot ${{ env.BOT_ID }} is already on the platform."
               echo "DEPLOYED=0" >>$GITHUB_ENV
             fi
           fi
